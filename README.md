@@ -18,44 +18,44 @@ Bandwidth: 100 Mbps
 --------------------------------
 
 
-sudo apt update && sudo apt upgrade -y  
+sudo apt update && sudo apt upgrade -y
 
-sudo apt install curl git jq build-essential gcc unzip wget lz4 -y  
+sudo apt install curl git jq build-essential gcc unzip wget lz4 -y
 
 --------------------------------
 
 
-cd $HOME && \    
-ver="1.22.0" && \    
-wget "https://golang.org/dl/go$ver.linux-amd64.tar.gz" && \   
-sudo rm -rf /usr/local/go && \   
-sudo tar -C /usr/local -xzf "go$ver.linux-amd64.tar.gz" && \   
-rm "go$ver.linux-amd64.tar.gz" && \    
-echo "export PATH=$PATH:/usr/local/go/bin:$HOME/go/bin" >> $HOME/.bash_profile && \   
-source $HOME/.bash_profile && \     
-go version     
+cd $HOME && \
+ver="1.22.0" && \
+wget "https://golang.org/dl/go$ver.linux-amd64.tar.gz" && \
+sudo rm -rf /usr/local/go && \
+sudo tar -C /usr/local -xzf "go$ver.linux-amd64.tar.gz" && \
+rm "go$ver.linux-amd64.tar.gz" && \
+echo "export PATH=$PATH:/usr/local/go/bin:$HOME/go/bin" >> $HOME/.bash_profile && \
+source $HOME/.bash_profile && \ 
+go version
 
 
 -----------------------------------------------
 
 
-git clone https://github.com/initia-labs/initia.git  
-cd initia  
-git checkout v0.2.12    
-git switch -c v0.2.12  
-make install   
-initiad version  
+git clone https://github.com/initia-labs/initia.git
+cd initia
+git checkout v0.2.12 
+git switch -c v0.2.12
+make install
+initiad version
 
 
 --------------------------------
 
 
 
-echo 'export MONIKER="my_node"' >> ~/.bash_profile    
-echo 'export CHAIN_ID="initiation-1"' >> ~/.bash_profile   
-echo 'export WALLET_NAME="wallet"' >> ~/.bash_profile   
-echo 'export RPC_PORT="26657"' >> ~/.bash_profile    
-source $HOME/.bash_profile   
+echo 'export MONIKER="my_node"' >> ~/.bash_profile
+echo 'export CHAIN_ID="initiation-1"' >> ~/.bash_profile
+echo 'export WALLET_NAME="wallet"' >> ~/.bash_profile
+echo 'export RPC_PORT="26657"' >> ~/.bash_profile  
+source $HOME/.bash_profile
 
 حتما در قسمت 
 Moniker
@@ -64,11 +64,11 @@ Moniker
 
 --------------------------------
 
-cd $HOME  
-initiad init $MONIKER --chain-id $CHAIN_ID   
-initiad config set client chain-id $CHAIN_ID   
-initiad config set client node tcp://localhost:$RPC_PORT   
-initiad config set client keyring-backend os   
+cd $HOME
+initiad init $MONIKER --chain-id $CHAIN_ID
+initiad config set client chain-id $CHAIN_ID
+initiad config set client node tcp://localhost:$RPC_PORT
+initiad config set client keyring-backend os
 
 --------------------------------
 
@@ -83,13 +83,13 @@ sed -i -e "s/^seeds *=.*/seeds = \"$SEEDS\"/; s/^persistent_peers *=.*/persisten
 
 --------------------------------
 
-EXTERNAL_IP=$(wget -qO- eth0.me) \  
-PROXY_APP_PORT=26658 \  
-P2P_PORT=26656 \  
-PPROF_PORT=6060 \  
-API_PORT=1317 \  
-GRPC_PORT=9090 \  
-GRPC_WEB_PORT=9091  
+EXTERNAL_IP=$(wget -qO- eth0.me) \
+PROXY_APP_PORT=26658 \
+P2P_PORT=26656 \
+PPROF_PORT=6060 \
+API_PORT=1317 \
+GRPC_PORT=9090 \
+GRPC_WEB_PORT=9091
 
 
 --------------------------------
@@ -130,29 +130,29 @@ sed -i "s/^indexer *=.*/indexer = \"kv\"/" $HOME/.initia/config/config.toml
 
 --------------------------------
 
-sudo tee /etc/systemd/system/initiad.service > /dev/null <<EOF  
-[Unit]   
-Description=Initia Node  
-After=network.target  
+sudo tee /etc/systemd/system/initiad.service > /dev/null <<EOF
+[Unit]
+Description=Initia Node
+After=network.target
 
-[Service]  
-User=$USER  
-Type=simple  
-ExecStart=$(which initiad) start --home $HOME/.initia  
-Restart=on-failure  
-LimitNOFILE=65535  
+[Service]
+User=$USER
+Type=simple
+ExecStart=$(which initiad) start --home $HOME/.initia
+Restart=on-failure
+LimitNOFILE=65535
 
-[Install]  
-WantedBy=multi-user.target  
-EOF  
+[Install]
+WantedBy=multi-user.target
+EOF
 
 
 --------------------------------
 
-sudo systemctl daemon-reload && \  
-sudo systemctl enable initiad && \  
-sudo systemctl restart initiad && \  
-sudo journalctl -u initiad -f -o cat  
+sudo systemctl daemon-reload && \
+sudo systemctl enable initiad && \
+sudo systemctl restart initiad && \
+sudo journalctl -u initiad -f -o cat
 
 --------------------------------
 
@@ -202,32 +202,32 @@ https://discord.gg/initia
 
 --------------------------------
 
-initiad q bank balances $(initiad keys show $WALLET_NAME -a) 
+initiad q bank balances $(initiad keys show $WALLET_NAME -a)
 
 --------------------------------
 
-initiad tx mstaking create-validator \  
-  --amount=5000000uinit \  
-  --pubkey=$(initiad tendermint show-validator) \  
-  --moniker=Crypton \  
-  --chain-id=$CHAIN_ID \  
-  --commission-rate=0.05 \  
-  --commission-max-rate=0.10 \  
-  --commission-max-change-rate=0.01 \  
-  --from=wallet \  
-  --identity="" \  
-  --website="https://github.com/cryptoneth/" \  
-  --details="every thing will go down but there is no gravity here" \  
-  --node=http://localhost:26657 \  
-  --gas-adjustment 1.4 \  
-  --gas auto \  
-  --gas-prices 0.15uinit \  
-  -y  
+initiad tx mstaking create-validator \
+  --amount=5000000uinit \
+  --pubkey=$(initiad tendermint show-validator) \
+  --moniker=Crypton \
+  --chain-id=$CHAIN_ID \
+  --commission-rate=0.05 \
+  --commission-max-rate=0.10 \
+  --commission-max-change-rate=0.01 \
+  --from=wallet \
+  --identity="" \
+  --website="https://github.com/cryptoneth/" \
+  --details="every thing will go down but there is no gravity here" \
+  --node=http://localhost:26657 \
+  --gas-adjustment 1.4 \
+  --gas auto \
+  --gas-prices 0.15uinit \
+  -y
 
 --------------------------------
 *Delegate
 
-initiad tx mstaking delegate $(initiad keys show wallet --bech val -a)  5000000uinit --from wallet --gas-adjustment 1.4 --gas auto --gas-prices 0.15uinit --node=http://localhost:26657 -y  
+initiad tx mstaking delegate $(initiad keys show wallet --bech val -a)  5000000uinit --from wallet --gas-adjustment 1.4 --gas auto --gas-prices 0.15uinit --node=http://localhost:26657 -y
 
 --------------------------------
 
@@ -240,12 +240,12 @@ initiad tx gov vote 20 yes --from wallet --chain-id initiation-1 --gas-adjustmen
 ** Oracle
 
 
-cd $HOME  
-rm -rf slinky  
-git clone https://github.com/skip-mev/slinky.git  
-cd slinky  
-git checkout v0.4.3   
-git switch -c v0.4.3    
+cd $HOME
+rm -rf slinky
+git clone https://github.com/skip-mev/slinky.git
+cd slinky
+git checkout v0.4.3
+git switch -c v0.4.3
 
 -------------------------------------------
 
@@ -256,29 +256,29 @@ mv build/slinky /usr/local/bin/
 
 -------------------------------------------
 
-sudo tee /etc/systemd/system/slinkyd.service > /dev/null <<EOF  
-[Unit]  
-Description=Initia Slinky Oracle  
-After=network-online.target  
+sudo tee /etc/systemd/system/slinkyd.service > /dev/null <<EOF
+[Unit]
+Description=Initia Slinky Oracle
+After=network-online.target
 
-[Service]  
-User=$USER  
-ExecStart=$(which slinky) --oracle-config-path $HOME/slinky/config/core/oracle.json --market-map-endpoint 127.0.0.1:15090  
-Restart=on-failure  
-RestartSec=30  
-LimitNOFILE=65535  
+[Service]
+User=$USER
+ExecStart=$(which slinky) --oracle-config-path $HOME/slinky/config/core/oracle.json --market-map-endpoint 127.0.0.1:15090
+Restart=on-failure
+RestartSec=30
+LimitNOFILE=65535
   
-[Install]  
-WantedBy=multi-user.target  
-EOF  
+[Install]
+WantedBy=multi-user.target
+EOF
 
 -------------------------------------------
 
-sudo systemctl daemon-reload  
-sudo systemctl enable slinkyd.service  
-sudo systemctl restart slinkyd.service  
+sudo systemctl daemon-reload
+sudo systemctl enable slinkyd.service
+sudo systemctl restart slinkyd.service
 
-journalctl -fu slinkyd --no-hostname  
+journalctl -fu slinkyd --no-hostname
 
 -------------------------------------------
 
@@ -289,22 +289,22 @@ nano /root/.initia/config/app.toml
 
 *Note: go to the end of the page with the arrow keys. Or press ctrl w and type oracle instead of search. Enter and it will go away. Arrange the one like in the 1st picture as in the 2nd picture.
 
-enabled = "true"  
-oracle_address = "127.0.0.1:8080"  
-client_timeout = "500ms"  
+enabled = "true"
+oracle_address = "127.0.0.1:8080"
+client_timeout = "500ms"
 
 -------------------------------------------
 
-cd  
-sudo systemctl daemon-reload  
-sudo systemctl restart initiad  
-sudo systemctl restart slinkyd.service  
-sudo journalctl -u initiad.service -f --no-hostname -o cat  
+cd
+sudo systemctl daemon-reload
+sudo systemctl restart initiad
+sudo systemctl restart slinkyd.service
+sudo journalctl -u initiad.service -f --no-hostname -o cat
 
 
 -------------------------------------------
 
-Validator status :
+**Validator status :
 
 
 initiad q mstaking validator $(initiad keys show $WALLET_NAME --bech val -a)  
