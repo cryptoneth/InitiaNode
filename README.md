@@ -158,6 +158,10 @@ sudo journalctl -u initiad -f -o cat
 
 *SnapShot Download
 
+از اینجا به توضیحات ویدیو حتما مراجعه کنید
+سایت اکسپلورر : https://scan.initia.tech/initiation-1
+الان اسنپ شات آپدیت شده هست
+
 
 systemctl stop initiad
 
@@ -175,9 +179,24 @@ mv $HOME/.initia/priv_validator_state.json.backup $HOME/.initia/data/priv_valida
 
 --------------------------------
 
+طبق ویدیو اسنپ شات رو در لحظه از این سایت آپدیت کردم این سایت ممکنه عوض شه :
+
+https://docs.huginn.tech/testnet-guides/initia/snapshot
+
+اپدیت که کردید یه بار دیگه Peers رو بزنید که کدش بالا تر هست اپدیت شه بعدش برید کامند بعدی
+
+--------------------------------------------------
+
 sudo systemctl restart initiad && sudo journalctl -u initiad -f -o cat
 
+این کد رو زدید اگر دیدید اکثریت ارور هست باز مجدد کد مربوط به Peers هارو کپی کنید ( شاید تو چنل و اینجا آپدیتش کنم ) ویدیو رو ببینید متوجه میشید
+
+
+حالا هی استاتوس نود رو با کد پایین چک کنید تا همه چیز درست شه
+
 initiad status | jq
+
+اگر استاتوس به False تبدیل شد و همه چیز درست بود و بلاک ها سینک بود برید مرحله بعدی
 
 --------------------------------
 
