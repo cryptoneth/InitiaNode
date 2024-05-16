@@ -334,6 +334,9 @@ initiad q mstaking validator $(initiad keys show $WALLET_NAME --bech val -a)
 
 
 
+فرم : 
+
+https://docs.google.com/forms/d/e/1FAIpQLSc09Kl6mXyZHOL12n_6IUA8MCcL6OqzTqsoZn9N8gpptoeU_Q/viewform?usp=send_form
 
 
 
