@@ -156,9 +156,8 @@ sudo journalctl -u initiad -f -o cat
 
 --------------------------------
 
-wget https://rpc-initia-testnet.trusted-point.com/latest_snapshot.tar.lz4
+*SnapShot Download
 
---------------------------------
 
 systemctl stop initiad
 
@@ -166,9 +165,7 @@ cp $HOME/.initia/data/priv_validator_state.json $HOME/.initia/priv_validator_sta
 
 --------------------------------
 
-initiad tendermint unsafe-reset-all --home $HOME/.initia --keep-addr-book
-
-lz4 -d -c ./latest_snapshot.tar.lz4 | tar -xf - -C $HOME/.initia
+curl -L https://snapshots.lavenderfive.com/testnet-snapshots/initia/initia_137317.tar.lz4 | tar -Ilz4 -xf - -C .initia
 
 --------------------------------
 
