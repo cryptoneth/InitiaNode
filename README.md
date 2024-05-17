@@ -176,6 +176,13 @@ lz4 -c -d initia_170136.tar.lz4  | tar -x -C $HOME/.initia
 
 mv $HOME/.initia/priv_validator_state.json.backup $HOME/.initia/data/priv_validator_state.json 
 
+
+اگر بالاییا کار نکرد
+
+*******https://services.anatolianteam.com/docs/Testnet/Cosmos-Ecosystem/initia/snapshot
+
+یه اسنپ شات هم تو سایت بالا هست کداش
+
 --------------------------------------------------
 
 sudo systemctl restart initiad && sudo journalctl -u initiad -f -o cat
