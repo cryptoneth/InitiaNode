@@ -162,30 +162,27 @@ sudo journalctl -u initiad -f -o cat
 سایت اکسپلورر : https://scan.initia.tech/initiation-1
 الان اسنپ شات آپدیت شده هست
 
+sudo apt update
+
+
+sudo apt install lz4
 
 systemctl stop initiad
 
-cp $HOME/.initia/data/priv_validator_state.json $HOME/.initia/priv_validator_state.json.backup
+wget -O initia_snapshot.tar.lz4 https://snapshot.huginn.tech/testnet/initia/initia_snapshot.tar.lz4
 
---------------------------------
-
-curl -L https://snapshots.lavenderfive.com/testnet-snapshots/initia/initia_137317.tar.lz4 | tar -Ilz4 -xf - -C .initia
-
---------------------------------
 
 **BackUp
 
-mv $HOME/.initia/priv_validator_state.json.backup $HOME/.initia/data/priv_validator_state.json
+cp ~/.initia/data/priv_validator_state.json ~/.initia/priv_validator_state.json
 
---------------------------------
+initiad comet unsafe-reset-all --home $HOME/.initia--keep-addr-book
 
-طبق ویدیو اسنپ شات رو در لحظه از این سایت آپدیت کردم این سایت ممکنه عوض شه :
+lz4 -c -d initia_snapshot.tar.lz4 | tar -x -C $HOME/.initia/data
 
-https://docs.huginn.tech/testnet-guides/initia/snapshot
+cp ~/.initia/priv_validator_state.json ~/.initia/data/priv_validator_state.json
 
-اپدیت که کردید یه بار دیگه 
-Peers
- رو بزنید که کدش بالا تر هست اپدیت شه بعدش برید کامند بعدی
+sudo service initiad start
 
 --------------------------------------------------
 
