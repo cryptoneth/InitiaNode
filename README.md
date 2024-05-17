@@ -167,21 +167,17 @@ systemctl stop initiad
 
 cp $HOME/.initia/data/priv_validator_state.json $HOME/.initia/priv_validator_state.json.backup 
 
-wget -O initia_170136.tar.lz4 https://snapshots.polkachu.com/testnet-snapshots/initia/initia_170136.tar.lz4 --inet4-only
-
 initiad tendermint unsafe-reset-all --home $HOME/.initia --keep-addr-book
 
-lz4 -c -d initia_170136.tar.lz4  | tar -x -C $HOME/.initia
+SNAP_NAME=$(curl -s https://testnet.anatolianteam.com/initia/ | egrep -o ">initiation-1.*\.tar.lz4" | tr -d ">")
 
+curl -L https://testnet.anatolianteam.com/initia/${SNAP_NAME} | tar -I lz4 -xf - -C $HOME/.initia
 
 mv $HOME/.initia/priv_validator_state.json.backup $HOME/.initia/data/priv_validator_state.json 
 
+systemctl restart initiad && journalctl -u initiad -f -o cat
 
-اگر بالاییا کار نکرد
 
-*******https://services.anatolianteam.com/docs/Testnet/Cosmos-Ecosystem/initia/snapshot
-
-یه اسنپ شات هم تو سایت بالا هست کداش
 
 --------------------------------------------------
 
