@@ -162,27 +162,16 @@ sudo journalctl -u initiad -f -o cat
 سایت اکسپلورر : https://scan.initia.tech/initiation-1
 الان اسنپ شات آپدیت شده هست
 
-sudo apt update
-
-
-sudo apt install lz4
 
 systemctl stop initiad
 
-wget -O initia_snapshot.tar.lz4 https://snapshot.huginn.tech/testnet/initia/initia_snapshot.tar.lz4
+cp $HOME/.initia/data/priv_validator_state.json $HOME/.initia/priv_validator_state.json.backup 
 
+initiad tendermint unsafe-reset-all --home $HOME/.initia --keep-addr-book
+SNAP_NAME=$(curl -s https://testnet.anatolianteam.com/initia/ | egrep -o ">initiation-1.*\.tar.lz4" | tr -d ">")
+curl -L https://testnet.anatolianteam.com/initia/${SNAP_NAME} | tar -I lz4 -xf - -C $HOME/.initia
 
-**BackUp
-
-cp ~/.initia/data/priv_validator_state.json ~/.initia/priv_validator_state.json
-
-initiad comet unsafe-reset-all --home $HOME/.initia--keep-addr-book
-
-lz4 -c -d initia_snapshot.tar.lz4 | tar -x -C $HOME/.initia/data
-
-cp ~/.initia/priv_validator_state.json ~/.initia/data/priv_validator_state.json
-
-sudo service initiad start
+mv $HOME/.initia/priv_validator_state.json.backup $HOME/.initia/data/priv_validator_state.json 
 
 --------------------------------------------------
 
