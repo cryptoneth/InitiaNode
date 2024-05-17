@@ -41,8 +41,8 @@ go version
 
 git clone https://github.com/initia-labs/initia.git
 cd initia
-git checkout v0.2.12
-git switch -c v0.2.12
+git checkout v0.2.14
+git switch -c v0.2.14
 make install
 initiad version
 
