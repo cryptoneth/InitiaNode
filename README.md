@@ -163,19 +163,29 @@ sudo journalctl -u initiad -f -o cat
 الان اسنپ شات آپدیت شده هست
 
 
-systemctl stop initiad
+sudo apt update
 
-cp $HOME/.initia/data/priv_validator_state.json $HOME/.initia/priv_validator_state.json.backup 
+sudo apt install snapd -y
+
+sudo snap install lz4
+
+sudo systemctl stop initiad
+
+wget -O initia_187918.tar.lz4 https://snapshots.polkachu.com/testnet-snapshots/initia/initia_187918.tar.lz4 --inet4-only
+
+cp ~/.initia/data/priv_validator_state.json  ~/.initia/priv_validator_state.json
+
+sudo systemctl restart initiad
+
+mv $HOME/.initia/priv_validator_state.json.backup $HOME/.initia/data/priv_validator_state.json
+
 
 initiad tendermint unsafe-reset-all --home $HOME/.initia --keep-addr-book
 
-SNAP_NAME=$(curl -s https://testnet.anatolianteam.com/initia/ | egrep -o ">initiation-1.*\.tar.lz4" | tr -d ">")
+lz4 -c -d initia_187918.tar.lz4  | tar -x -C $HOME/.initia
 
-curl -L https://testnet.anatolianteam.com/initia/${SNAP_NAME} | tar -I lz4 -xf - -C $HOME/.initia
+cp ~/.initia/priv_validator_state.json  ~/.initia/data/priv_validator_state.json
 
-mv $HOME/.initia/priv_validator_state.json.backup $HOME/.initia/data/priv_validator_state.json 
-
-systemctl restart initiad && journalctl -u initiad -f -o cat
 
 
 
