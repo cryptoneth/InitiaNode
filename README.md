@@ -171,18 +171,17 @@ sudo snap install lz4
 
 sudo systemctl stop initiad
 
-wget -O initia_187918.tar.lz4 https://snapshots.polkachu.com/testnet-snapshots/initia/initia_187918.tar.lz4 --inet4-only
-
-cp ~/.initia/data/priv_validator_state.json  ~/.initia/priv_validator_state.json
+wget -O initia_202803.tar.lz4 https://snapshots.polkachu.com/testnet-snapshots/initia/initia_202803.tar.lz4 --inet4-only
 
 sudo systemctl restart initiad
 
-mv $HOME/.initia/priv_validator_state.json.backup $HOME/.initia/data/priv_validator_state.json
-
+cp ~/.initia/data/priv_validator_state.json  ~/.initia/priv_validator_state.json
 
 initiad tendermint unsafe-reset-all --home $HOME/.initia --keep-addr-book
 
-lz4 -c -d initia_187918.tar.lz4  | tar -x -C $HOME/.initia
+mv $HOME/.initia/priv_validator_state.json.backup $HOME/.initia/data/priv_validator_state.json
+
+lz4 -c -d initia_202803.tar.lz4  | tar -x -C $HOME/.initia
 
 cp ~/.initia/priv_validator_state.json  ~/.initia/data/priv_validator_state.json
 
