@@ -260,7 +260,7 @@ initiad tx gov vote 20 yes --from wallet --chain-id initiation-1 --gas-adjustmen
 
 --------------------------------
 
-** Oracle *****
+** Oracle ***** 
 
 
 اگر از قبل با من زدید کد پایین
