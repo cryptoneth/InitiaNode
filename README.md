@@ -263,16 +263,27 @@ initiad tx gov vote 20 yes --from wallet --chain-id initiation-1 --gas-adjustmen
 ** Oracle *****
 
 
-
+اگر از قبل با من زدید کد پایین
 
 cd $HOME && \
 rm -rf slinky && \
 sudo systemctl stop slinkyd.service && \
-sudo systemctl stop initia-oracle && \
 ver="v0.4.3" && \
 git clone https://github.com/skip-mev/slinky.git && \
 cd slinky && \
 git switch $ver
+
+گر کلا جدید دارید اوراکل میسازید کد پایین
+
+cd $HOME && \
+ver="v0.4.3" && \
+git clone https://github.com/skip-mev/slinky.git && \
+cd slinky && \
+git switch $ver && \
+
+-----------------------------------------------------
+
+از اینجا به بعد هر دو دسته
 
 
 make build 
