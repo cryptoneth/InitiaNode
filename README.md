@@ -353,6 +353,11 @@ sed -i '/metrics_enabled =/c\metrics_enabled = "false"' $NODE_APP_CONFIG_PATH
 
 ----------------------------------------------------------
 
+nano /root/.initia/config/app.toml
+
+
+----------------------------------------------------------
+
 cd
 
 PEERS=$(curl -s --max-time 3 --retry 2 --retry-connrefused "https://rpc-initia-testnet.trusted-point.com/peers.txt")
