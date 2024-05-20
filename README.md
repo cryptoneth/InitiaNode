@@ -260,69 +260,109 @@ initiad tx gov vote 20 yes --from wallet --chain-id initiation-1 --gas-adjustmen
 
 --------------------------------
 
-** Oracle
+** Oracle *****
 
 
-cd $HOME
-rm -rf slinky
-git clone https://github.com/skip-mev/slinky.git
-cd slinky
-git checkout v0.4.3
-git switch -c v0.4.3
 
--------------------------------------------
 
-make build
+cd $HOME && \
+rm -rf slinky && \
+sudo systemctl stop slinkyd.service && \
+sudo systemctl stop initia-oracle && \
+ver="v0.4.3" && \
+git clone https://github.com/skip-mev/slinky.git && \
+cd slinky && \
+git switch $ver
+
+
+make build 
 
 
 mv build/slinky /usr/local/bin/
 
--------------------------------------------
 
-sudo tee /etc/systemd/system/slinkyd.service > /dev/null <<EOF
+echo 'export NODE_GRPC_ENDPOINT="0.0.0.0:9090"' >> ~/.bash_profile
+echo 'export ORACLE_CONFIG_PATH="$HOME/slinky/config/core/oracle.json"' >> ~/.bash_profile
+echo 'export ORACLE_GRPC_PORT="8080"' >> ~/.bash_profile
+echo 'export ORACLE_METRICS_ENDPOINT="0.0.0.0:8002"' >> ~/.bash_profile
+source $HOME/.bash_profile
+
+
+sed -i "s|\"url\": \".*\"|\"url\": \"$NODE_GRPC_ENDPOINT\"|" $ORACLE_CONFIG_PATH
+sed -i "s|\"prometheusServerAddress\": \".*\"|\"prometheusServerAddress\": \"$ORACLE_METRICS_ENDPOINT\"|" $ORACLE_CONFIG_PATH
+sed -i "s|\"port\": \".*\"|\"port\": \"$ORACLE_GRPC_PORT\"|" $ORACLE_CONFIG_PATH
+
+-------------------------------------------------------
+
+
+sudo tee /etc/systemd/system/initia-oracle.service > /dev/null <<EOF
 [Unit]
-Description=Initia Slinky Oracle
-After=network-online.target
+Description=Initia Oracle
+After=network.target
 
 [Service]
 User=$USER
-ExecStart=$(which slinky) --oracle-config-path $HOME/slinky/config/core/oracle.json --market-map-endpoint 127.0.0.1:15090
+Type=simple
+ExecStart=$(which slinky) --oracle-config-path $ORACLE_CONFIG_PATH
 Restart=on-failure
-RestartSec=30
 LimitNOFILE=65535
-  
+
 [Install]
 WantedBy=multi-user.target
 EOF
 
--------------------------------------------
+--------------------------------------------------
 
-sudo systemctl daemon-reload
-sudo systemctl enable slinkyd.service
-sudo systemctl restart slinkyd.service
-
-journalctl -fu slinkyd --no-hostname
-
--------------------------------------------
-
-nano /root/.initia/config/app.toml
+sudo systemctl daemon-reload && \
+sudo systemctl enable initia-oracle && \
+sudo systemctl restart initia-oracle && \
+sudo journalctl -u initia-oracle -f -o cat
 
 
--------------------------------------------
+cd $HOME/slinky
 
-*Note: go to the end of the page with the arrow keys. Or press ctrl w and type oracle instead of search. Enter and it will go away. Arrange the one like in the 1st picture as in the 2nd picture.
 
-enabled = "true"
-oracle_address = "127.0.0.1:8080"
-client_timeout = "500ms"
+make run-oracle-client
 
--------------------------------------------
+----------------------------------------------------------
+
+ORACLE_GRPC_ENDPOINT="127.0.0.0:8080"
+ORACLE_CLIENT_TIMEOUT="500ms"
+NODE_APP_CONFIG_PATH="$HOME/.initia/config/app.toml"
+
+sed -i '/\[oracle\]/!b;n;c\
+enabled = "true"' $NODE_APP_CONFIG_PATH
+
+sed -i "/oracle_address =/c\oracle_address = \"$ORACLE_GRPC_ENDPOINT\"" $NODE_APP_CONFIG_PATH
+
+sed -i "/client_timeout =/c\client_timeout = \"$ORACLE_CLIENT_TIMEOUT\"" $NODE_APP_CONFIG_PATH
+
+sed -i '/metrics_enabled =/c\metrics_enabled = "false"' $NODE_APP_CONFIG_PATH
+
+
+----------------------------------------------------------
 
 cd
+
+PEERS=$(curl -s --max-time 3 --retry 2 --retry-connrefused "https://rpc-initia-testnet.trusted-point.com/peers.txt")
+if [ -z "$PEERS" ]; then
+    echo "No peers were retrieved from the URL."
+else
+    echo -e "\nPEERS: "$PEERS""
+    sed -i "s/^persistent_peers *=.*/persistent_peers = \"$PEERS\"/" "$HOME/.initia/config/config.toml"
+    echo -e "\nConfiguration file updated successfully.\n"
+fi
+
+
+
 sudo systemctl daemon-reload
+
 sudo systemctl restart initiad
-sudo systemctl restart slinkyd.service
-sudo journalctl -u initiad.service -f --no-hostname -o cat
+
+sudo systemctl restart slinkyd
+
+sudo journalctl -u initiad -f --no-hostname -o cat
+
 
 
 -------------------------------------------
@@ -332,6 +372,11 @@ sudo journalctl -u initiad.service -f --no-hostname -o cat
 
 initiad q mstaking validator $(initiad keys show $WALLET_NAME --bech val -a)  
 
+
+chech block :
+
+
+initiad status | jq
 
 
 
