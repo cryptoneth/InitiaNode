@@ -399,3 +399,30 @@ https://docs.google.com/forms/d/e/1FAIpQLSc09Kl6mXyZHOL12n_6IUA8MCcL6OqzTqsoZn9N
 
 
 
+RPC Endpoint
+
+نودتون رو بگیرید 
+
+دستور زیر رو بزنید ❗️
+
+RPC="$(wget -qO- eth0.me)$(grep -A 3 "\[rpc\]" ~/.initia/config/config.toml | egrep -o ":[0-9]+")" && echo $RPC
+
+با ایپی خودتون و پورتی که تنظیم شده به شما داده میشه ، یادداشتش کنید واسه فرم های بعدی 
+
+curl $RPC/status
+
+کد بالا رو بزنید اگر ارور Connection refused  گرفتید RPC تون رو ست کنید
+
+
+sed -i 's/^laddr = "tcp:\/\/127\.0\.0\.1:/laddr = "tcp:\/\/0.0.0.0:/' $HOME/.initia/config/config.toml
+
+sudo systemctl restart initiad
+
+sudo journalctl -u initiad -f -o cat --no-hostname
+
+curl $RPC/status
+
+
+
+
+
