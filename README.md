@@ -276,6 +276,7 @@ git switch $ver
 گر کلا جدید دارید اوراکل میسازید کد پایین *****
 
 cd $HOME && \
+rm -rf slinky && \
 ver="v0.4.3" && \
 git clone https://github.com/skip-mev/slinky.git && \
 cd slinky && \
