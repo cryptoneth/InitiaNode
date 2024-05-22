@@ -361,14 +361,12 @@ nano /root/.initia/config/app.toml
 
 cd
 
-PEERS=$(curl -s --max-time 3 --retry 2 --retry-connrefused "https://rpc-initia-testnet.trusted-point.com/peers.txt")
-if [ -z "$PEERS" ]; then
-    echo "No peers were retrieved from the URL."
-else
-    echo -e "\nPEERS: "$PEERS""
-    sed -i "s/^persistent_peers *=.*/persistent_peers = \"$PEERS\"/" "$HOME/.initia/config/config.toml"
-    echo -e "\nConfiguration file updated successfully.\n"
-fi
+PEERS="a96694150ccd37f224059b3307dfcf6c38859c9c@65.21.109.183:26656,5c5441d80d686129b9c3fe62830ee5fc732bdce4@138.201.196.246:26656,8c63f08b951f7680a443caa1144b720d2a666261@65.108.232.174:17956,878a184ea897412f9823e3190b8ef1c81e263508@65.108.60.2:26656,37a683597dc1807c57550b5f10e8238bc5c81994@195.201.58.101:26656,22d15dd14042fe37356d5c21ada139d753c770db@65.109.49.248:26656,b3202f401aee2ad59afae9d4f671647005538059@168.119.235.140:17956,769b90d0c4c4cedb5d0b8d6a3627a5792b4c8519@5.78.98.32:17956,4e33a90e043ce7c80f0ccff86bffa0c921b9a1e7@116.202.243.98:26656,29835dc71444e9a728cb25a12febe67e255dce56@65.108.229.141:26756,e1bc2c4ef45100e12fe49d5999f7b21ff32c64c4@95.217.132.163:26656,d76820c0890379eb75e3c27ea881167f97f3ca70@95.216.43.37:26656" && \
+SEEDS="2eaa272622d1ba6796100ab39f58c75d458b9dbc@34.142.181.82:26656,c28827cb96c14c905b127b92065a3fb4cd77d7f6@testnet-seeds.whispernode.com:25756" && \
+sed -i \
+    -e "s/^seeds *=.*/seeds = \"$SEEDS\"/" \
+    -e "s/^persistent_peers *=.*/persistent_peers = \"$PEERS\"/" \
+    "$HOME/.initia/config/config.toml"
 
 
 
