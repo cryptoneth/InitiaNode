@@ -279,7 +279,7 @@ cd $HOME && \
 ver="v0.4.3" && \
 git clone https://github.com/skip-mev/slinky.git && \
 cd slinky && \
-git switch $ver && \
+git switch $ver && 
 
 -----------------------------------------------------
 
